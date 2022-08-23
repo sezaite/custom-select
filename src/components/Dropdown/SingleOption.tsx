@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import { OptionValues } from '../../typings/generalTypes';
-import check from '../../assets/icons/check-lg.svg';
+import check from '../../assets/icons/checkLg.svg';
 
-interface OptionStyledProps {
+export interface OptionStyledProps {
     optionValue: OptionValues;
 }
 
-interface OptionProps extends OptionStyledProps {
+export interface OptionProps extends OptionStyledProps {
     onSelect: (id: number | string, groupID: number | string)=> void;
     group: number | string;
 }

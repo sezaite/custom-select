@@ -1,5 +1,7 @@
-import React, { createContext, useContext } from "react";
+// import React, { createContext, useContext } from "react";
+import React from "react";
 import { Dropdown } from "./components/Dropdown";
+import chevron from '../src/assets/icons/chevronDown.svg';
 
 export type GroupedListType = typeof GROUPED_LIST;
 
@@ -47,13 +49,13 @@ const GROUPED_LIST = {
 ]
 }
 
-export const DropdownContext = createContext<GroupedListType>(GROUPED_LIST);
-export const useDropdownContext = () => useContext(DropdownContext);
+// export const DropdownContext = createContext<GroupedListType>(GROUPED_LIST);
+// export const useDropdownContext = () => useContext(DropdownContext);
 const App = () => {
   return (
-    <DropdownContext.Provider value={GROUPED_LIST}>
-      <Dropdown id="test-id" isGrouped={false}/>
-    </DropdownContext.Provider>
+    // <DropdownContext.Provider value={GROUPED_LIST}>
+      <Dropdown id="test-id" isGrouped={false} data={GROUPED_LIST} dropdownMenuHeight="220px" width="250px"/>
+    // </DropdownContext.Provider>
   );
 }
 

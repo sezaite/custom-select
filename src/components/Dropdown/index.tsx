@@ -1,22 +1,40 @@
-import React, {useEffect, useState} from "react";
-import { useDropdownContext } from "../../App";
+import React, {useState} from "react";
+// import { GroupedListType, useDropdownContext } from "../../App";
+import { GroupedListType } from "../../App";
 import styled from 'styled-components';
-import ChevronDown from '../../assets/icons/chevron-down.svg';
+import ChevronDown from '../../assets/icons/chevronDown.svg';
 import { SingleOption } from "./SingleOption";
 
 
-interface DropdownProps extends React.InputHTMLAttributes<HTMLIFrameElement> {
+interface DropdownProps extends DropdownStyledProps, SelectButtonStyledProps, SelectMenuStyledProps {
     id: string;
     isGrouped: boolean;
+    data:  GroupedListType;
+    chevron?: string;
+    
 }
 
-interface SelectMenuProps {
+interface DropdownStyledProps {
+    width?: string;
+}
+
+interface SelectButtonStyledProps {
+    border?: string,
+    buttonHeight?: string,
+}
+
+interface SelectMenuStyledProps {
+    dropdownMenuHeight?: string;
+}
+
+interface SelectMenuProps extends SelectMenuStyledProps{
     isOpen: boolean,
 }
 
-export const Dropdown: React.FC<DropdownProps> = ({id, isGrouped}) => {
-    const {options, placeholder} = useDropdownContext();
-    const [selectMenu, setSelectMenu] = useState(options);
+export const Dropdown: React.FC<DropdownProps> = ({id, isGrouped, data, border, width, chevron = ChevronDown, buttonHeight, dropdownMenuHeight}) => {
+    
+
+    const [selectMenu, setSelectMenu] = useState(data.options);
     const [isOpen, setIsOpen] = useState(false);
 
     const handleClick = () => {
@@ -24,6 +42,7 @@ export const Dropdown: React.FC<DropdownProps> = ({id, isGrouped}) => {
         return;
     }
     const onSelect = (id: number | string, groupID: number | string) => {
+        
             const newState = selectMenu;
             const newArr = newState.map(group => {
                 if (group.groupID === groupID){
@@ -44,13 +63,13 @@ export const Dropdown: React.FC<DropdownProps> = ({id, isGrouped}) => {
             setSelectMenu(newArr);
         }
     
-    return <DropdownWrap id={id}>
-        <DropdownToggler type="button" onClick={handleClick}>
-            {placeholder}
-            <Image src={ChevronDown} alt="arrow down" isOpen={isOpen}/>
+    return <DropdownWrap id={id} width={width}>
+        <DropdownToggler border={border} type="button" onClick={handleClick} buttonHeight={buttonHeight}>
+            {data.placeholder}
+            <Image src={chevron} alt="arrow down" isOpen={isOpen}/>
         </DropdownToggler>
 
-        <SelectMenu isOpen={isOpen}>
+        <SelectMenu isOpen={isOpen} dropdownMenuHeight={dropdownMenuHeight}>
         {
             selectMenu.map(({groupName, groupID, groupList})=> (
                <div key={groupID}>
@@ -71,20 +90,21 @@ export const Dropdown: React.FC<DropdownProps> = ({id, isGrouped}) => {
     </DropdownWrap>
 }
 
-const DropdownWrap = styled.div`
+const DropdownWrap = styled.div<DropdownStyledProps>`
     position: relative;
-    width: 200px;
+    width: ${({width})=>width || "200px" };
     margin: 30px auto;
 `
 
-const DropdownToggler = styled.button`
+const DropdownToggler = styled.button<SelectButtonStyledProps>`
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding: 10px 15px;
+    padding: 0 15px;
+    height: ${({buttonHeight})=>buttonHeight || "42px" };
     border-radius: 0;
-    border: 1px solid #333;
+    border: ${({border})=>border || "1px solid #333" };
     background-color: transparent;
     cursor: pointer;
 `
@@ -97,7 +117,7 @@ const SelectMenu = styled.div<SelectMenuProps>`
     display:${({isOpen})=>isOpen ? "block" : "none" };
     border: 1px solid #333;
     border-top: none;
-    max-height: 160px;
+    max-height: ${({dropdownMenuHeight})=>dropdownMenuHeight || "160px" };
     overflow-y: auto;
 `
 const Image = styled.img<SelectMenuProps>`
