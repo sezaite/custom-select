@@ -1,4 +1,4 @@
-# Mygom.Tech qualification task:
+# Custom select component:
 
 Create dropdown component from scratch using React and Typescript
 
